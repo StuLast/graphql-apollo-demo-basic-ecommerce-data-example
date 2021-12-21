@@ -2,34 +2,32 @@ import { ApolloServer, gql } from 'apollo-server';
 
 const typeDefs = gql`
   type Query {
-    hello: String
-    numberOfAnimals: Int
-    priceOfAnIdea: Float
-    boJoSucks: Boolean!
+    product: [Product!]
+  }
+
+  type Product {
     id: ID!
-    fruits: [String!]
+    name: String!
+    description: String!
+    quantity: Int!
+    price: Float!
+    onSale: Boolean!
   }
 `;
 
 const resolvers = {
   Query: {
-    id() {
-      return 'ui234kdji9-234';
-    },
-    hello() {
-      return 'Hello!';
-    },
-    numberOfAnimals() {
-      return 44;
-    },
-    priceOfAnIdea() {
-      return 33.2;
-    },
-    boJoSucks() {
-      return true;
-    },
-    fruits() {
-      return ['apple', 'orange', 'banana', 'mango'];
+    product() {
+      return [
+        {
+          id: '1',
+          name: 'Running Shoes',
+          description: 'Road running shoes, neutral, road, low profile',
+          quantity: 10,
+          price: 69.99,
+          onSale: true,
+        },
+      ];
     },
   },
 };
