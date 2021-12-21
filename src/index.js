@@ -19,11 +19,14 @@ const typeDefs = gql`
     price: Float!
     image: String!
     onSale: Boolean!
+    category: Category!
+    categoryId: ID!
   }
 
   type Category {
     id: ID!
     name: String!
+    products: [Product!]!
   }
 `;
 
@@ -42,6 +45,20 @@ const resolvers = {
     category(parent, args, ctx, info) {
       const { id } = args;
       return categories.find((category) => category.id === id);
+    },
+  },
+
+  Category: {
+    products(parent, args, ctx, info) {
+      const { id } = parent;
+      return products.filter((product) => product.categoryId === id);
+    },
+  },
+
+  Product: {
+    category(parent, args, ctx, info) {
+      const { categoryId } = parent;
+      return categories.find((category) => category.id === categoryId);
     },
   },
 };
