@@ -1,6 +1,14 @@
 const Query = {
-  products(parent, args, { products }, info) {
-    return products;
+  products(parent, { filter }, { products }, info) {
+    let filteredProducts = products;
+
+    if(filter) {
+      if(filter.onSale) {
+        filteredProducts = filteredProducts.filter((product) => product.onSale)
+      }
+    }
+
+    return filteredProducts;
   },
   product(parent, { id }, { products }, info) {
     return products.find((product) => product.id === id);
@@ -11,13 +19,6 @@ const Query = {
   category(parent, { id }, { categories }, info) {
     return categories.find((category) => category.id === id);
   },
-  reviews(parent, args, { reviews }, info) {
-    return reviews;
-  },
-  review(parent, { id }, { reviews }, info ) {
-    console.log(id);
-    return reviews.find((review) => reviews.id === id);
-  }
 }
 
 export { Query };

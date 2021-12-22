@@ -2,12 +2,14 @@ import { gql } from 'apollo-server';
 
 const typeDefs = gql`
   type Query {
-    products: [Product!]!
+    products(filter: ProductsFilterInput): [Product!]!
     product(id: ID!): Product
     categories: [Category!]!
     category(id: ID!): Category
-    reviews: [Review!]!
-    review(id: ID!): Review
+  }
+
+  input ProductsFilterInput {
+    onSale: Boolean
   }
 
   type Product {
@@ -25,7 +27,7 @@ const typeDefs = gql`
   type Category {
     id: ID!
     name: String!
-    products: [Product!]!
+    products(filter: ProductsFilterInput): [Product!]!
   }
 
   type Review {
