@@ -1,5 +1,6 @@
 const Category = {
-  products({ id }, { filter }, { products }, info) {
+  products({ id }, { filter }, { db }, info) {
+    const { products } = db;
     let filteredProducts = products.filter((product) => product.categoryId === id);
 
     if (!filter) {
