@@ -1,11 +1,24 @@
 const Query = {
-  products(parent, { filter }, { products }, info) {
+  products(parent, { filter }, { products, reviews }, info) {
     let filteredProducts = products;
 
-    if(filter) {
-      if(filter.onSale) {
-        filteredProducts = filteredProducts.filter((product) => product.onSale)
-      }
+    if (!filter) {
+      return filteredProducts;
+    }
+    console.log(filter.avgRating);
+
+    if (filter.onSale) {
+      filteredProducts = filteredProducts.filter((product) => product.onSale);
+    }
+
+    if ([1, 2, 3, 4, 5].includes(filter.avgRating)) {
+      filteredProducts = filteredProducts.filter((product) => {
+        const filteredReviews = reviews.filter(review => review.productId === product.id);
+        let accumulator = 0;
+        filteredReviews.forEach(review => accumulator += review.rating);
+        const avgRating = accumulator > 0 ? accumulator / filteredReviews.length : 0;
+        return avgRating >= filter.avgRating;
+      })
     }
 
     return filteredProducts;
