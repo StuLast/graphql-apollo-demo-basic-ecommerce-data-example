@@ -1,20 +1,30 @@
 const Category = {
   products({ id }, { filter }, { products }, info) {
     let filteredProducts = products.filter((product) => product.categoryId === id);
-    console.log("Category products:",filteredProducts);
-    console.log("filter:",filter)
 
-    if(filter) {
-      if(filter.onSale) {
-        console.log("Filtering for products on sale...");
-        filteredProducts = filteredProducts.filter((product) => product.onSale);
-      }
+    if (!filter) {
+      return filteredProducts;
     }
-    console.log("OnSale products:",filteredProducts)
+
+    if (filter.onSale) {
+      console.log("Filtering for products on sale...");
+      filteredProducts = filteredProducts.filter((product) => product.onSale);
+    }
+
+    if ([1, 2, 3, 4, 5].includes(filter.avgRating)) {
+      filteredProducts = filteredProducts.filter((product) => {
+        const filteredReviews = reviews.filter(review => review.productId === product.id);
+        let accumulator = 0;
+        filteredReviews.forEach(review => accumulator += review.rating);
+        const avgRating = accumulator > 0 ? accumulator / filteredReviews.length : 0;
+        return avgRating >= filter.avgRating;
+      })
+    }
+
 
     return filteredProducts
   },
 }
 
-export { Category }
+export default Category
 

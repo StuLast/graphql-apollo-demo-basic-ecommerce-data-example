@@ -5,7 +5,6 @@ const Query = {
     if (!filter) {
       return filteredProducts;
     }
-    console.log(filter.avgRating);
 
     if (filter.onSale) {
       filteredProducts = filteredProducts.filter((product) => product.onSale);
@@ -34,4 +33,4 @@ const Query = {
   },
 }
 
-export { Query };
+export default Query;
