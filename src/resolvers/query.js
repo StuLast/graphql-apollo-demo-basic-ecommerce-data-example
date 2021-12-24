@@ -1,5 +1,6 @@
 const Query = {
-  products(parent, { filter }, { products, reviews }, info) {
+  products(parent, { filter }, { db }, info) {
+    const { products, reviews } = db;
     let filteredProducts = products;
 
     if (!filter) {
@@ -22,13 +23,18 @@ const Query = {
 
     return filteredProducts;
   },
-  product(parent, { id }, { products }, info) {
+  product(parent, { id }, { db }, info) {
+    const { products } = db;
     return products.find((product) => product.id === id);
   },
-  categories(parent, args, { categories }, info) {
+
+  categories(parent, args, { db }, info) {
+    const { categories } = db;
     return categories;
   },
-  category(parent, { id }, { categories }, info) {
+
+  category(parent, { id }, { db }, info) {
+    const { categories } = db;
     return categories.find((category) => category.id === id);
   },
 }

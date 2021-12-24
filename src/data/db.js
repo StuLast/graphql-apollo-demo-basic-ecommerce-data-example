@@ -287,5 +287,6 @@ const reviews = [
     productId: '47bf3941-9c8b-42c0-9c72-7f3985492a5b',
   },
 ];
+const db = { products, categories, reviews }
 
-export { products, categories, reviews };
+export default db;

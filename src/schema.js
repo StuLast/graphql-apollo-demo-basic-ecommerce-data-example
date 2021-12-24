@@ -1,6 +1,13 @@
 import { gql } from 'apollo-server';
 
 const typeDefs = gql`
+
+  enum Action {
+    CREATED
+    UPDATED
+    DELETED
+  }
+
   type Query {
     products(filter: ProductsFilterInput): [Product!]!
     product(id: ID!): Product
@@ -9,9 +16,15 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addCategory (input: AddCategoryInput!): Category!
-    addProduct (input: AddProductInput!): Product!
-    addReview (input: AddReviewInput!): Review!
+    addCategory (input: AddCategoryInput!): MutateCategoryAction!
+    deleteCategory(input: DeleteCategoryInput!): MutateCategoryAction!
+    updateCategory(input: UpdateCategoryInput!): MutateCategoryAction!
+    addProduct (input: AddProductInput!): MutateProductAction!
+    deleteProduct(input: DeleteProductInput!): MutateProductAction!
+    updateProduct(input: UpdateProductInput!): MutateProductAction!
+    addReview (input: AddReviewInput!): MutateReviewAction!
+    deleteReview (input: DeleteReviewInput!): MutateReviewAction!
+    updateReview (input: UpdateReviewInput!): MutateReviewAction!
   }
 
   type Product {
@@ -22,7 +35,7 @@ const typeDefs = gql`
     price: Float!
     image: String!
     onSale: Boolean!
-    category: Category!
+    category: Category
     reviews: [Review!]!
   }
 
@@ -33,7 +46,26 @@ const typeDefs = gql`
     price: Float
     image: String
     onSale: Boolean 
-    categoryId: ID!
+    categoryId: ID
+  }
+
+  input DeleteProductInput {
+    id: ID!
+  }
+
+  input UpdateProductInput {
+    id: ID!
+    data: UpdateProductInputData!
+  }
+
+  input UpdateProductInputData {
+    name: String
+    description: String
+    quantity: Int
+    price: Float
+    image: String
+    onSale: Boolean 
+    categoryId: ID
   }
 
   input ProductsFilterInput {
@@ -41,15 +73,38 @@ const typeDefs = gql`
     avgRating: Int
   }
 
+  type MutateProductAction {
+    action: Action!
+    data: Product!
+  }
+
 
   type Category {
     id: ID!
     name: String!
-    products(filter: ProductsFilterInput): [Product!]!
+    products(filter: ProductsFilterInput): [Product]!
   }
 
   input AddCategoryInput {
     name: String!
+  }
+
+  input DeleteCategoryInput {
+    id: ID!
+  }
+
+  input UpdateCategoryInput {
+    id: ID!
+    data: UpdateCategoryInputData!
+  }
+
+  input UpdateCategoryInputData {
+    name: String
+  }
+
+  type MutateCategoryAction {
+    action: Action!
+    data: Category!
   }
 
   type Review {
@@ -67,6 +122,28 @@ const typeDefs = gql`
     rating: Int!
     productId: ID!
   }
+
+  input DeleteReviewInput {
+    id: ID!
+  }
+
+  input UpdateReviewInput {
+    id: ID!
+    data: UpdateReviewInputData 
+  }
+
+  input UpdateReviewInputData {
+    date: String
+    title: String
+    comment: String
+    rating: Int
+  }
+
+  type MutateReviewAction {
+    action: Action!
+    data: Review!
+  }
+
 `;
 
 export default typeDefs;
