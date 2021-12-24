@@ -1,6 +1,13 @@
 import { gql } from 'apollo-server';
 
 const typeDefs = gql`
+
+  enum Action {
+    CREATED
+    UPDATED
+    DELETED
+  }
+
   type Query {
     products(filter: ProductsFilterInput): [Product!]!
     product(id: ID!): Product
@@ -10,9 +17,14 @@ const typeDefs = gql`
 
   type Mutation {
     addCategory (input: AddCategoryInput!): MutateCategoryAction!
-    addProduct (input: AddProductInput!): Product!
-    addReview (input: AddReviewInput!): Review!
-    deleteCategory(input: DeleteCategoryInput): MutateCategoryAction!
+    deleteCategory(input: DeleteCategoryInput!): MutateCategoryAction!
+    updateCategory(input: UpdateCategoryInput!): MutateCategoryAction!
+    addProduct (input: AddProductInput!): MutateProductAction!
+    deleteProduct(input: DeleteProductInput!): MutateProductAction!
+    updateProduct(input: UpdateProductInput!): MutateProductAction!
+    addReview (input: AddReviewInput!): MutateReviewAction!
+    deleteReview (input: DeleteReviewInput!): MutateReviewAction!
+    updateReview (input: UpdateReviewInput!): MutateReviewAction!
   }
 
   type Product {
@@ -37,9 +49,33 @@ const typeDefs = gql`
     categoryId: ID
   }
 
+  input DeleteProductInput {
+    id: ID!
+  }
+
+  input UpdateProductInput {
+    id: ID!
+    data: UpdateProductInputData!
+  }
+
+  input UpdateProductInputData {
+    name: String
+    description: String
+    quantity: Int
+    price: Float
+    image: String
+    onSale: Boolean 
+    categoryId: ID
+  }
+
   input ProductsFilterInput {
     onSale: Boolean
     avgRating: Int
+  }
+
+  type MutateProductAction {
+    action: Action!
+    data: Product!
   }
 
 
@@ -57,8 +93,17 @@ const typeDefs = gql`
     id: ID!
   }
 
+  input UpdateCategoryInput {
+    id: ID!
+    data: UpdateCategoryInputData!
+  }
+
+  input UpdateCategoryInputData {
+    name: String
+  }
+
   type MutateCategoryAction {
-    action: String!
+    action: Action!
     data: Category!
   }
 
@@ -78,6 +123,26 @@ const typeDefs = gql`
     productId: ID!
   }
 
+  input DeleteReviewInput {
+    id: ID!
+  }
+
+  input UpdateReviewInput {
+    id: ID!
+    data: UpdateReviewInputData 
+  }
+
+  input UpdateReviewInputData {
+    date: String
+    title: String
+    comment: String
+    rating: Int
+  }
+
+  type MutateReviewAction {
+    action: Action!
+    data: Review!
+  }
 
 `;
 
